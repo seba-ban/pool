@@ -1,0 +1,40 @@
+Just some exercise, but could be written better, I'll revisit it one day... Basic idea is you have a container object where you can add an element with corresponding amount. Eg. you can add 10 strings "a", and 5 strings "b" - you'll have 15 elements in the pool, 10 pointing to "a", 5 - to "b". You can then pick a random element from the pool. Internally, all amounts are added to represent pool's `length` and each element has a corresponding range within 0-`length`. `pick` method just gets a random number from 0 to `length`, and finds the proper range (and thus element) using binary search.
+
+---
+
+{{>all-docs}}
+
+---
+
+Example:
+
+```js
+class User {
+  constructor(public name: string) { }
+}
+
+const users = ['Monica', 'Rachel', "Phoebe", "Chandler", "Joey", "Ross"].map(name => new User(name))
+
+const pool = new Pool<User>()
+for (const user of users)
+  pool.add([user, user.name.length])
+
+console.log(pool.length)
+// 34
+
+console.log(pool.pool)
+// [
+//   { element: User { name: 'Monica' }, percentage: 17.647058823529413 },
+//   { element: User { name: 'Rachel' }, percentage: 17.647058823529413 },
+//   { element: User { name: 'Phoebe' }, percentage: 17.647058823529413 },
+//   { element: User { name: 'Chandler' }, percentage: 23.52941176470588 },
+//   { element: User { name: 'Joey' }, percentage: 11.76470588235294 },
+//   { element: User { name: 'Ross' }, percentage: 11.76470588235294 }
+// ]
+
+console.log(pool.chanceFor(users[0]))
+// 17.647058823529413
+
+console.log(pool.pick())
+// User { name: 'Monica' }
+```
